@@ -1,5 +1,9 @@
 Store a single value in memory with expiration
 
+ - fast & simple alternative to things like `ActiveSupport::Cache::MemoryStore`
+ - does not cache `nil`
+ - uses `Process::CLOCK_MONOTONIC` for fast time math
+
 Install
 =======
 
@@ -14,7 +18,7 @@ Usage
 # use it to cache results
 class Foo
   def expensive_stuff
-    memory_store.cache { ..something expensive.. }
+    memory_store.cache { ... something expensive ... }
   end
 
   private
@@ -37,4 +41,4 @@ Author
 [Michael Grosser](http://grosser.it)<br/>
 michael@grosser.it<br/>
 License: MIT<br/>
-
+[![Build Status](https://travis-ci.org/grosser/mini_memory_store.svg)](https://travis-ci.org/grosser/mini_memory_store)

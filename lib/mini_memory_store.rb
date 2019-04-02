@@ -1,13 +1,12 @@
+# frozen_string_literal: true
 class MiniMemoryStore
-  VERSION = File.read( File.join(File.dirname(__FILE__),'..','VERSION') ).strip
-
-  def initialize(options={})
-    @options = options
+  def initialize(expires_in:)
+    @expires_in = expires_in
     @last_set = 0
   end
 
   def set(value)
-    @last_set = Time.now.to_i
+    @last_set = now
     @value = value
   end
 
@@ -19,15 +18,13 @@ class MiniMemoryStore
     end
   end
 
-  def cache(&block)
+  def cache
     value = get
     if value.nil?
-      value = block.call
-      set(value)
-      value
-    else
-      value
+      value = yield
+      set value
     end
+    value
   end
 
   def clear
@@ -37,7 +34,10 @@ class MiniMemoryStore
   private
 
   def expired?
-    return unless @options[:expires_in]
-    (Time.now.to_i - @options[:expires_in]) >= @last_set
+    (now - @expires_in) >= @last_set
+  end
+
+  def now
+    Process.clock_gettime(Process::CLOCK_MONOTONIC)
   end
 end

@@ -1,7 +1,9 @@
-source :rubygems
+# frozen_string_literal: true
+source "https://rubygems.org"
+gemspec
 
-group :development do
-  gem 'rake'
-  gem 'rspec', '~>2'
-  gem 'jeweler'
-end
+gem "bump"
+gem "rake"
+gem "maxitest"
+gem "single_cov"
+gem "rubocop"
